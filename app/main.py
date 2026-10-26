@@ -55,14 +55,18 @@ app.include_router(analytics.router, prefix="/api")
 app.include_router(reports.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
 
-# Mount frontend
-frontend_dist = settings.BASE_DIR.parent / "frontend" / "dist"
-frontend_src = settings.BASE_DIR.parent / "frontend"
-
-if frontend_dist.exists():
-    app.mount("/", StaticFiles(directory=str(frontend_dist), html=True), name="frontend_dist")
-elif frontend_src.exists():
-    app.mount("/", StaticFiles(directory=str(frontend_src), html=True), name="frontend_src")
+# Mount frontend (supports root, subfolder, and deployment environments)
+frontend_candidates = [
+    Path("frontend"),
+    settings.BASE_DIR / "frontend",
+    settings.BASE_DIR.parent / "frontend",
+]
+mounted = False
+for p in frontend_candidates:
+    if p.exists() and (p / "index.html").exists():
+        app.mount("/", StaticFiles(directory=str(p), html=True), name="frontend")
+        mounted = True
+        break
 else:
     @app.get("/")
     def root_status():
