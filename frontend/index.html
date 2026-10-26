@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediShield AI - Pharmaceutical Risk Screening & Inspection Platform</title>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <svg class="brand-icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <div>
+          <div class="brand-title">MEDISHIELD <span>AI</span></div>
+          <div class="brand-subtitle">PHARMA RISK PLATFORM</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <!-- Core Visual Screening -->
+        <div>
+          <div class="nav-section-title">Core Screening</div>
+          <div class="nav-item active" data-view="dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Dashboard</span>
+          </div>
+          <div class="nav-item" data-view="new-inspection">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>New Inspection</span>
+          </div>
+          <div class="nav-item" data-view="results">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Forensic Results</span>
+          </div>
+          <div class="nav-item" data-view="history">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Inspection History</span>
+            <span class="nav-badge" id="badge-total-inspections">0</span>
+          </div>
+        </div>
+
+        <!-- Pharmaceutical Ledger -->
+        <div>
+          <div class="nav-section-title">Pharmaceutical Ledger</div>
+          <div class="nav-item" data-view="references">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Reference Library</span>
+          </div>
+          <div class="nav-item" data-view="products">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>
+            <span>Product Registry</span>
+          </div>
+          <div class="nav-item" data-view="batches">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            <span>Batch Ledger</span>
+          </div>
+          <div class="nav-item" data-view="recalls">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>Active Recalls</span>
+            <span class="nav-badge" id="badge-active-recalls" style="color: #ef4444; background: rgba(239, 68, 68, 0.15);">1</span>
+          </div>
+        </div>
+
+        <!-- Intelligence & Governance -->
+        <div>
+          <div class="nav-section-title">Investigation & Intel</div>
+          <div class="nav-item" data-view="cases">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Investigation Cases</span>
+            <span class="nav-badge" id="badge-unresolved-cases">1</span>
+          </div>
+          <div class="nav-item" data-view="analytics">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span>Risk Analytics</span>
+          </div>
+          <div class="nav-item" data-view="model-status">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Model Status</span>
+          </div>
+          <div class="nav-item" data-view="audit-logs">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Audit Logs</span>
+          </div>
+          <div class="nav-item" data-view="users">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>User Management</span>
+          </div>
+          <div class="nav-item" data-view="settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>Help & Settings</span>
+          </div>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="hardware-pill">
+          <span class="hardware-dot"></span>
+          <span>CPU MODE (0% GPU)</span>
+        </div>
+        <span style="font-size: 0.72rem; color: var(--text-dim);">v1.0.0</span>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="breadcrumbs">
+            <span>MediShield</span>
+            <span>/</span>
+            <span class="crumb-active" id="crumb-current-view">Dashboard</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="demo-indicator">DEMO DATA ACTIVE</div>
+
+          <!-- Active User Profile Button -->
+          <div class="user-profile-btn" id="btn-user-profile" tabindex="0">
+            <div class="user-avatar" id="avatar-initials">EV</div>
+            <div class="user-details">
+              <span class="user-name" id="display-user-name">Dr. Eleanor Vance</span>
+              <span class="user-role-badge" id="display-user-role">ADMINISTRATOR</span>
+            </div>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+      </header>
+
+      <!-- View Container -->
+      <main class="content-body">
+        
+        <!-- ===================================================================
+             VIEW 1: DASHBOARD
+             =================================================================== -->
+        <div id="view-dashboard" class="tab-view active">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Pharmaceutical Screening & Intel Overview</h1>
+              <p>Operational risk indicators synthesized from visual inspection, OCR verification, and regulatory ledgers.</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-outline" id="btn-refresh-dashboard">Refresh Metrics</button>
+              <button class="btn btn-primary" onclick="switchView('new-inspection')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                New Inspection Scan
+              </button>
+            </div>
+          </div>
+
+          <!-- KPI Cards Grid -->
+          <section class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-title">Total Inspections</span>
+                <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+              </div>
+              <div class="kpi-value" id="kpi-total-inspections">0</div>
+              <div class="kpi-footer">Persisted inspection scans</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-title">Manual Reviews Required</span>
+                <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+              </div>
+              <div class="kpi-value" style="color: #f59e0b;" id="kpi-manual-reviews">0</div>
+              <div class="kpi-footer">High/Medium risk scans requiring triage</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-title">Visual Anomalies Flagged</span>
+                <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/></svg></div>
+              </div>
+              <div class="kpi-value" style="color: #ef4444;" id="kpi-anomalies-flagged">0</div>
+              <div class="kpi-footer">Packaging blur / kerning / seal flaws</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-title">Expired Products</span>
+                <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              </div>
+              <div class="kpi-value" style="color: #f59e0b;" id="kpi-expired-flagged">0</div>
+              <div class="kpi-footer">Lapsed shelf-life packaging</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-title">Active Recalls Alert</span>
+                <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
+              </div>
+              <div class="kpi-value" style="color: #ef4444;" id="kpi-active-recalls">0</div>
+              <div class="kpi-footer">Active regulatory recall notices</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-title">Open Investigation Cases</span>
+                <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+              </div>
+              <div class="kpi-value" id="kpi-open-cases">0</div>
+              <div class="kpi-footer">Active escalated investigations</div>
+            </div>
+          </section>
+
+          <!-- Recent Inspections Table -->
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <h2 class="card-panel-title">Recent Inspection Scans</h2>
+              <button class="btn btn-outline" onclick="switchView('history')">View Full History &rarr;</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Product & Packaging</th>
+                    <th>Batch</th>
+                    <th>Risk Level</th>
+                    <th>Screening Outcome</th>
+                    <th>Date & Time</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboard-recent-table-body">
+                  <!-- Populated dynamically via app.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 2: NEW INSPECTION SCAN
+             =================================================================== -->
+        <div id="view-new-inspection" class="tab-view">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Submit Packaging Specimen for Inspection</h1>
+              <p>Upload high-resolution packaging photo to run multi-factor AI visual screening, OCR extraction, and reference comparison.</p>
+            </div>
+          </div>
+
+          <!-- Quick Test Samples Banner -->
+          <div style="background: rgba(0, 242, 254, 0.06); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 8px; padding: 14px 18px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <strong style="color: var(--cyan-primary); font-size: 0.88rem;">1-Click Demo Packaging Specimen Picker:</strong>
+              <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">Test the AI screening, OCR label reader, and recall engine instantly with ready-to-test specimens.</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-outline" style="font-size: 0.75rem;" onclick="loadDemoSample('genuine')">Genuine Amoxicillin</button>
+              <button class="btn btn-outline" style="font-size: 0.75rem; border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;" onclick="loadDemoSample('counterfeit')">Counterfeit Typo Augmentin</button>
+              <button class="btn btn-outline" style="font-size: 0.75rem; border-color: rgba(245, 158, 11, 0.4); color: #fcd34d;" onclick="loadDemoSample('expired')">Expired Paracetamol</button>
+            </div>
+          </div>
+
+          <div class="results-grid">
+            <!-- Upload Dropzone -->
+            <div class="card-panel">
+              <div id="dropzone" style="border: 2px dashed var(--border-subtle); border-radius: 8px; padding: 36px 20px; text-align: center; cursor: pointer; transition: all 0.2s ease;">
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--cyan-primary); margin: 0 auto 12px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <h3 style="font-size: 1rem; color: var(--text-white); margin-bottom: 6px;">Drag and drop packaging image here</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">Supports JPG, JPEG, PNG, WEBP (Max 15 MB)</p>
+                <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" style="display: none;" />
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('file-input').click()">Browse Local File</button>
+              </div>
+
+              <!-- Preview Card -->
+              <div id="upload-preview-container" style="display: none; margin-top: 18px; padding: 12px; background: #060b14; border-radius: 8px; border: 1px solid var(--border-subtle);">
+                <div style="display: flex; gap: 14px; align-items: center;">
+                  <img id="upload-preview-img" src="" alt="Specimen Preview" style="width: 100px; height: 80px; object-fit: contain; border-radius: 4px; background: #000;" />
+                  <div>
+                    <h4 id="preview-filename" style="color: var(--text-white); font-size: 0.88rem;">filename.jpg</h4>
+                    <p id="preview-meta" style="font-size: 0.76rem; color: var(--text-muted);">700x500 px • 48 KB</p>
+                    <span style="font-size: 0.72rem; color: var(--emerald-green);">Validation Passed ✓</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Metadata Selection & Submission -->
+            <div class="card-panel">
+              <h3 class="card-panel-title" style="margin-bottom: 16px;">Optional Specimen Context</h3>
+              
+              <div class="form-group">
+                <label>Select Product from Registry (Optional)</label>
+                <select id="select-product" class="select-input">
+                  <option value="">-- Autodetect from Packaging via OCR --</option>
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Target Reference Image</label>
+                <select id="select-reference" class="select-input">
+                  <option value="">-- Auto-link approved reference --</option>
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 12px; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 20px;">
+                <strong style="color: var(--text-white); display: block; margin-bottom: 4px;">Honest Uncertainty Disclosure:</strong>
+                MediShield AI provides visual screening triage. Confidence scores reflect internal feature attributions and do NOT represent certified pharmacological guarantees.
+              </div>
+
+              <button id="btn-submit-inspection" class="btn btn-primary" style="width: 100%; justify-content: center;" disabled>
+                Run AI Inspection & Risk Screening
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 3: FORENSIC RESULTS VIEWER
+             =================================================================== -->
+        <div id="view-results" class="tab-view">
+          <div class="view-header">
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <h1 id="result-inspection-code">INS-AMX-001</h1>
+                <span class="badge" id="result-risk-badge">LOW RISK</span>
+                <span id="result-demo-pill" class="demo-indicator">DEMO RECORD</span>
+              </div>
+              <p id="result-summary-line" style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+                Inspected on 2026-10-26 • Processing Duration: 64.2 ms • Provider: demo
+              </p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-outline" id="btn-download-pdf">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download PDF Report
+              </button>
+              <button class="btn btn-danger" id="btn-escalate-case">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Escalate Investigation Case
+              </button>
+            </div>
+          </div>
+
+          <!-- Main Forensic Split Screen -->
+          <div class="results-grid">
+            <!-- Left: Switchable Image Viewer -->
+            <div class="image-viewer-container">
+              <div class="viewer-tabs">
+                <button class="viewer-tab-btn active" data-img-tab="original">Original Specimen</button>
+                <button class="viewer-tab-btn" data-img-tab="explain">Saliency Heatmap / Explainability</button>
+                <button class="viewer-tab-btn" data-img-tab="compare">Reference Comparison & Difference</button>
+              </div>
+
+              <div class="viewer-image-display">
+                <img id="active-viewer-img" src="" alt="Inspection Specimen" />
+              </div>
+
+              <div class="viewer-limitations-bar" id="viewer-limitation-text">
+                Explainability artifacts depict high-frequency spatial gradients and activation regions. They highlight statistical correlation, not verified physical causation.
+              </div>
+            </div>
+
+            <!-- Right: Independent Evidence Cards -->
+            <div style="display: flex; flex-direction: column; gap: 18px;">
+              
+              <!-- Evidence 1: AI Visual Screening Output -->
+              <div class="card-panel" style="margin-bottom: 0;">
+                <div class="card-panel-header">
+                  <h3 class="card-panel-title">1. AI Visual Screening Model</h3>
+                  <span id="pred-status-badge" class="badge badge-low">CLEAN</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                  <span style="font-size: 0.82rem; color: var(--text-muted);">Predicted Classification:</span>
+                  <strong id="pred-class-text" style="color: var(--text-white);">No visual anomaly detected</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                  <span style="font-size: 0.82rem; color: var(--text-muted);">Model Confidence:</span>
+                  <strong id="pred-conf-text" style="color: var(--cyan-primary);">92%</strong>
+                </div>
+                <p id="pred-note-text" style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.4; border-top: 1px solid var(--border-subtle); padding-top: 8px;">
+                  Inference executed on CPU via synthetic demonstration provider.
+                </p>
+              </div>
+
+              <!-- Evidence 2: OCR Label Extraction & Field Correction -->
+              <div class="card-panel" style="margin-bottom: 0;">
+                <div class="card-panel-header">
+                  <h3 class="card-panel-title">2. OCR Label Inspection & Edits</h3>
+                  <button class="btn btn-outline" style="font-size: 0.72rem; padding: 4px 8px;" id="btn-save-ocr">Save Corrections</button>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.8rem;">
+                  <div>
+                    <label style="font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;">Product Name</label>
+                    <input type="text" id="ocr-edit-name" class="input-text" style="padding: 4px 8px; font-size: 0.78rem;" />
+                  </div>
+                  <div>
+                    <label style="font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;">Manufacturer</label>
+                    <input type="text" id="ocr-edit-mfr" class="input-text" style="padding: 4px 8px; font-size: 0.78rem;" />
+                  </div>
+                  <div>
+                    <label style="font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;">Batch / Lot</label>
+                    <input type="text" id="ocr-edit-batch" class="input-text" style="padding: 4px 8px; font-size: 0.78rem;" />
+                  </div>
+                  <div>
+                    <label style="font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;">Expiry Date</label>
+                    <input type="text" id="ocr-edit-exp" class="input-text" style="padding: 4px 8px; font-size: 0.78rem;" />
+                  </div>
+                </div>
+                <div id="ocr-flags-container" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;">
+                  <!-- Flag pills -->
+                </div>
+              </div>
+
+              <!-- Evidence 3: Database & Recall Verification -->
+              <div class="card-panel" style="margin-bottom: 0;">
+                <div class="card-panel-header">
+                  <h3 class="card-panel-title">3. Ledger Cross-Reference & Recalls</h3>
+                  <span id="verif-recall-badge" class="badge badge-low">NO ACTIVE RECALL</span>
+                </div>
+                <p id="verif-summary-text" style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                  Product and batch matched against internal pharmaceutical registry.
+                </p>
+              </div>
+
+              <!-- Transparent Risk Assessment -->
+              <div class="card-panel" style="margin-bottom: 0; background: #070d18; border-color: rgba(0, 242, 254, 0.3);">
+                <div class="card-panel-header">
+                  <h3 class="card-panel-title">4. Multi-Factor Risk Summary</h3>
+                  <span id="risk-score-pill" style="font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; color: var(--cyan-primary);">8 / 100</span>
+                </div>
+                <p id="risk-summary-text" style="font-size: 0.82rem; color: var(--text-primary); line-height: 1.4; margin-bottom: 10px;">
+                  Low screening risk observed. Baseline typography and valid batch records verified.
+                </p>
+                <div id="reason-codes-pills" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <!-- Reason codes -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 4: INSPECTION HISTORY
+             =================================================================== -->
+        <div id="view-history" class="tab-view">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Inspection Audit History</h1>
+              <p>Searchable historical repository of all medicine visual screenings.</p>
+            </div>
+            <div class="view-actions">
+              <input type="text" id="history-search" class="input-text" placeholder="Search by code, product, batch..." style="width: 280px;" />
+            </div>
+          </div>
+
+          <div class="card-panel">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Thumbnail</th>
+                    <th>Code</th>
+                    <th>Product</th>
+                    <th>Batch</th>
+                    <th>Risk Assessment</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="history-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 5: REFERENCE LIBRARY
+             =================================================================== -->
+        <div id="view-references" class="tab-view">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Approved Packaging Reference Library</h1>
+              <p>Gold-standard packaging specimens used for pairwise structural similarity and difference mapping.</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-primary" onclick="openModal('modal-add-reference')">+ Register Reference Image</button>
+            </div>
+          </div>
+
+          <div id="references-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+            <!-- Reference cards -->
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 6: PRODUCT REGISTRY
+             =================================================================== -->
+        <div id="view-products" class="tab-view">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Pharmaceutical Product Registry</h1>
+              <p>Master directory of verified formulations, manufacturers, packaging profiles, and NDC/GTIN codes.</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-primary" onclick="openModal('modal-add-product')">+ Register Product</button>
+            </div>
+          </div>
+
+          <div class="card-panel">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Product Name</th>
+                    <th>Manufacturer / Brand</th>
+                    <th>Dosage Form</th>
+                    <th>Packaging Type</th>
+                    <th>Identifier (NDC)</th>
+                    <th>Registered Batches</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="products-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 7: BATCH LEDGER
+             =================================================================== -->
+        <div id="view-batches" class="tab-view">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Manufactured Batch Ledger</h1>
+              <p>Lot release records, expiration tracking, and manufacturer validation data.</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-primary" onclick="openModal('modal-add-batch')">+ Add Batch Record</button>
+            </div>
+          </div>
+
+          <div class="card-panel">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Batch / Lot No</th>
+                    <th>Linked Product</th>
+                    <th>Manufacturer</th>
+                    <th>Mfg Date</th>
+                    <th>Expiry Date</th>
+                    <th>Shelf Status</th>
+                    <th>Recall Status</th>
+                  </tr>
+                </thead>
+                <tbody id="batches-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 8: RECALL MANAGEMENT
+             =================================================================== -->
+        <div id="view-recalls" class="tab-view">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Pharmaceutical Recall Management</h1>
+              <p>Active and resolved manufacturer or regulatory recall notices.</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-danger" onclick="openModal('modal-add-recall')">+ Issue Recall Notice</button>
+            </div>
+          </div>
+
+          <div class="card-panel">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Recall Code</th>
+                    <th>Severity</th>
+                    <th>Product & Batch</th>
+                    <th>Reason for Recall</th>
+                    <th>Effective Date</th>
+                    <th>Notice Source</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recalls-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 9: INVESTIGATION CASES
+             =================================================================== -->
+        <div id="view-cases" class="tab-view">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Escalated Investigation Cases</h1>
+              <p>Triage and evidence review workflow for suspicious or non-compliant packaging specimens.</p>
+            </div>
+          </div>
+
+          <div class="card-panel">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Case No</th>
+                    <th>Priority</th>
+                    <th>Linked Inspection</th>
+                    <th>Title & Evidence Summary</th>
+                    <th>Assigned Reviewer</th>
+                    <th>Status</th>
+                    <th>Confirmed Counterfeit?</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="cases-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 10: ANALYTICS & TRENDS
+             =================================================================== -->
+        <div id="view-analytics" class="tab-view">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Risk Analytics & Visual Intelligence</h1>
+              <p>Longitudinal inspection trends, risk distributions, and quality metrics calculated directly from database records.</p>
+            </div>
+          </div>
+
+          <div class="results-grid">
+            <!-- 7-Day Trend Chart -->
+            <div class="card-panel">
+              <h3 class="card-panel-title">7-Day Inspection Volume & Anomaly Trend</h3>
+              <div id="chart-volume-container" style="height: 280px; display: flex; align-items: flex-end; gap: 24px; padding: 20px 10px 10px; border-bottom: 1px solid var(--border-subtle);">
+                <!-- Dynamic SVG bars -->
+              </div>
+            </div>
+
+            <!-- Risk Distribution Chart -->
+            <div class="card-panel">
+              <h3 class="card-panel-title">Historical Screening Risk Distribution</h3>
+              <div id="chart-distribution-container" style="display: flex; flex-direction: column; gap: 14px; padding: 20px 0;">
+                <!-- Category progress bars -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 11: MODEL STATUS & CONFIGURATION
+             =================================================================== -->
+        <div id="view-model-status" class="tab-view">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Model Status & Inference Architecture</h1>
+              <p>Hardware profile, active provider details, and transparent uncertainty governance.</p>
+            </div>
+          </div>
+
+          <div class="results-grid">
+            <div class="card-panel">
+              <h3 class="card-panel-title">Active Inference Engine</h3>
+              <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 14px;">
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: var(--text-muted);">Configured Provider:</span>
+                  <strong style="color: var(--cyan-primary);" id="model-provider-name">demo (Synthetic Demonstration Provider)</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: var(--text-muted);">Hardware Execution Profile:</span>
+                  <strong style="color: var(--emerald-green);">CPU Only (0% GPU Utilization)</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: var(--text-muted);">Mean Processing Latency:</span>
+                  <strong style="color: var(--text-white);">78.4 ms</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: var(--text-muted);">Explainability Module:</span>
+                  <strong style="color: var(--text-white);">Gradient Saliency & Bounding Box Homography</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: var(--text-muted);">OCR Extraction Engine:</span>
+                  <strong style="color: var(--text-white);">Rule-based Pattern Parser + EasyOCR Interface</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-panel">
+              <h3 class="card-panel-title">Provider Switching Instructions</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin: 10px 0;">
+                MediShield AI supports modular inference providers configurable in <code style="color: var(--cyan-primary);">backend/.env</code>:
+              </p>
+              <pre style="background: #040913; padding: 12px; border-radius: 6px; font-size: 0.76rem; color: #a5f3fc; border: 1px solid var(--border-subtle); margin-bottom: 12px;">
+# Available providers: demo, pretrained_cpu, unavailable
+MODEL_PROVIDER=demo
+MODEL_TASK=classification
+MODEL_DEVICE=cpu</pre>
+              <p style="font-size: 0.76rem; color: var(--text-dim); line-height: 1.4;">
+                If set to <code style="color: #fca5a5;">unavailable</code>, the system honestly displays an offline model state without fabricating predictions.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 12: AUDIT LOGS
+             =================================================================== -->
+        <div id="view-audit-logs" class="tab-view">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>System Audit Ledger</h1>
+              <p>Chronological, immutable event log of all inspections, registry updates, recalls, and role changes.</p>
+            </div>
+          </div>
+
+          <div class="card-panel">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp (UTC)</th>
+                    <th>Actor</th>
+                    <th>Action</th>
+                    <th>Target</th>
+                    <th>IP Address</th>
+                    <th>Outcome</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-logs-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 13: USER MANAGEMENT
+             =================================================================== -->
+        <div id="view-users" class="tab-view">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>User Management & Role Permissions</h1>
+              <p>Role-based access control (RBAC): Administrator, Field Inspector, QA Reviewer.</p>
+            </div>
+          </div>
+
+          <div class="card-panel">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Full Name</th>
+                    <th>Email Address</th>
+                    <th>Current Role</th>
+                    <th>Account Status</th>
+                    <th>Registered At</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="users-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 14: SETTINGS & HELP
+             =================================================================== -->
+        <div id="view-settings" class="tab-view">
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Settings, Guidelines & Regulatory Nomenclature</h1>
+              <p>Statutory limitations, system terminology, and operating instructions.</p>
+            </div>
+          </div>
+
+          <div class="results-grid">
+            <div class="card-panel">
+              <h3 class="card-panel-title">Mandatory Terminology Guide</h3>
+              <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px; font-size: 0.8rem; line-height: 1.4;">
+                <p><strong style="color: var(--cyan-primary);">AI visual screening:</strong> Model-generated feature classification or anomaly score.</p>
+                <p><strong style="color: var(--cyan-primary);">Reference comparison:</strong> Keypoint and structural difference between specimen and reference.</p>
+                <p><strong style="color: var(--cyan-primary);">Label inspection:</strong> OCR-extracted typography and date logic validation.</p>
+                <p><strong style="color: var(--cyan-primary);">Record verification:</strong> Cross-check against internal product & batch database.</p>
+                <p><strong style="color: var(--ruby-danger);">Confirmed counterfeit:</strong> ONLY when backed by authoritative external laboratory assay or manufacturer confirmation.</p>
+              </div>
+            </div>
+
+            <div class="card-panel">
+              <h3 class="card-panel-title">Statutory Legal Disclaimer</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-top: 10px;">
+                MediShield AI is designed strictly as a pharmaceutical visual-screening and risk-monitoring platform. It is not an officially certified medical device or chemical authentication assay. It must not be used as the sole basis for clinical administration decisions.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       MODAL DIALOGS
+       =================================================================== -->
+
+  <!-- Modal: Add Product -->
+  <div id="modal-add-product" class="modal-overlay" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Register New Pharmaceutical Product</h3>
+        <button class="modal-close" onclick="closeModal('modal-add-product')">&times;</button>
+      </div>
+      <form id="form-add-product">
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" id="new-prod-name" class="input-text" required placeholder="e.g. Azithromycin 250mg Tablets" />
+        </div>
+        <div class="form-group">
+          <label>Brand / Manufacturer</label>
+          <input type="text" id="new-prod-mfr" class="input-text" required placeholder="e.g. Pfizer Inc. / Sandoz" />
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label>Dosage Form</label>
+            <select id="new-prod-dosage" class="select-input">
+              <option value="Tablet">Tablet</option>
+              <option value="Capsule">Capsule</option>
+              <option value="Syrup">Syrup</option>
+              <option value="Injection">Injection</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Packaging Type</label>
+            <select id="new-prod-pkg" class="select-input">
+              <option value="Blister Pack">Blister Pack</option>
+              <option value="Bottle">Bottle</option>
+              <option value="Box">Box</option>
+              <option value="Vial">Vial</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Product Identifier (NDC / GTIN)</label>
+          <input type="text" id="new-prod-ndc" class="input-text" placeholder="e.g. NDC-00069-3150-14" />
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modal-add-product')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add Batch -->
+  <div id="modal-add-batch" class="modal-overlay" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Register Manufactured Batch</h3>
+        <button class="modal-close" onclick="closeModal('modal-add-batch')">&times;</button>
+      </div>
+      <form id="form-add-batch">
+        <div class="form-group">
+          <label>Select Product</label>
+          <select id="new-batch-prod-id" class="select-input" required></select>
+        </div>
+        <div class="form-group">
+          <label>Batch / Lot Number</label>
+          <input type="text" id="new-batch-num" class="input-text" required placeholder="e.g. AZT-2026-90" />
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label>Manufacturing Date</label>
+            <input type="date" id="new-batch-mfg" class="input-text" />
+          </div>
+          <div class="form-group">
+            <label>Expiry Date</label>
+            <input type="date" id="new-batch-exp" class="input-text" required />
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modal-add-batch')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Batch</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Escalate Case -->
+  <div id="modal-escalate-case" class="modal-overlay" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Escalate to Investigation Case</h3>
+        <button class="modal-close" onclick="closeModal('modal-escalate-case')">&times;</button>
+      </div>
+      <form id="form-escalate-case">
+        <div class="form-group">
+          <label>Case Title</label>
+          <input type="text" id="case-title" class="input-text" required placeholder="e.g. Suspected Packaging Defect in Lot 9921" />
+        </div>
+        <div class="form-group">
+          <label>Priority Level</label>
+          <select id="case-priority" class="select-input">
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="critical">Critical</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Investigator Notes & Observations</label>
+          <textarea id="case-initial-notes" class="input-text" style="height: 80px;" placeholder="Document initial physical packaging observations..."></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modal-escalate-case')">Cancel</button>
+          <button type="submit" class="btn btn-danger">Confirm Escalation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Application Controller Script -->
+  <script src="app.js"></script>
+</body>
+</html>
+
