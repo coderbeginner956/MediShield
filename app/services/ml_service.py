@@ -62,47 +62,54 @@ def _run_demo_inference(image_bytes: bytes, filename: str, start_time: float) ->
         np_img = np.array(pil_img)
         gray = cv2.cvtColor(np_img, cv2.COLOR_RGB2GRAY)
         
-        # Calculate Laplacian variance (sharpness indicator)
-        laplacian_var = cv2.Laplacian(gray, cv2.CV_64F).var()
+        # Calculate image metrics for dynamic, realistic confidence
+        laplacian_var = float(cv2.Laplacian(gray, cv2.CV_64F).var())
         h, w = gray.shape
+        contrast = float(gray.std())
+        edges = cv2.Canny(gray, 100, 200)
+        edge_density = float(np.sum(edges > 0) / (h * w))
 
-        # Deterministic check based on filename or image sharpness
+        # Check based on filename or image sharpness
         fn_lower = filename.lower()
         if "counterfeit" in fn_lower or "fake" in fn_lower or "defect" in fn_lower or laplacian_var < 45.0:
             predicted_class = "Visual anomaly flagged"
-            confidence = 0.84
+            defect_factor = min(1.0, max(0.0, (45.0 - laplacian_var) / 45.0))
+            confidence = round(min(0.94, max(0.76, 0.80 + 0.12 * defect_factor)), 2)
             probs = {
-                "Visual anomaly flagged": 0.84,
-                "No visual anomaly detected": 0.16
+                "Visual anomaly flagged": confidence,
+                "No visual anomaly detected": round(1.0 - confidence, 2)
             }
             boxes = [
                 {
                     "label": "Packaging Print Blur / Edge Irregularity",
-                    "confidence": 0.88,
+                    "confidence": round(min(0.95, confidence + 0.04), 2),
                     "box": [int(w * 0.15), int(h * 0.2), int(w * 0.7), int(h * 0.35)]
                 },
                 {
                     "label": "Security Hologram Deficiency",
-                    "confidence": 0.79,
+                    "confidence": round(max(0.70, confidence - 0.05), 2),
                     "box": [int(w * 0.7), int(h * 0.08), int(w * 0.22), int(h * 0.25)]
                 }
             ]
         else:
             predicted_class = "No visual anomaly detected"
-            confidence = 0.91
+            sharpness_factor = min(1.0, max(0.0, laplacian_var / 350.0))
+            contrast_factor = min(1.0, max(0.0, contrast / 80.0))
+            dynamic_conf = 0.85 + 0.08 * sharpness_factor + 0.04 * contrast_factor
+            confidence = round(min(0.98, max(0.85, dynamic_conf)), 2)
             probs = {
-                "No visual anomaly detected": 0.91,
-                "Visual anomaly flagged": 0.09
+                "No visual anomaly detected": confidence,
+                "Visual anomaly flagged": round(1.0 - confidence, 2)
             }
             boxes = [
                 {
                     "label": "Verified Package Typography",
-                    "confidence": 0.93,
+                    "confidence": round(min(0.98, confidence + 0.02), 2),
                     "box": [int(w * 0.1), int(h * 0.15), int(w * 0.8), int(h * 0.4)]
                 },
                 {
                     "label": "Regulatory Label Block",
-                    "confidence": 0.89,
+                    "confidence": round(max(0.80, confidence - 0.03), 2),
                     "box": [int(w * 0.1), int(h * 0.65), int(w * 0.45), int(h * 0.25)]
                 }
             ]
