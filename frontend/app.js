@@ -408,12 +408,19 @@ function renderForensicResults(data) {
     document.getElementById('pred-conf-text').textContent = `${Math.round((pred.confidence || 0) * 100)}%`;
     document.getElementById('pred-note-text').textContent = pred.explanation_note || '';
     const pBadge = document.getElementById('pred-status-badge');
-    if (pred.predicted_class.includes('anomaly')) {
+    const pClass = (pred.predicted_class || '').toLowerCase();
+    if (pClass.includes('no visual anomaly') || pClass.includes('clean') || pClass.includes('authentic') || pClass.includes('normal')) {
+      pBadge.className = 'badge badge-low';
+      pBadge.textContent = 'NO ANOMALY DETECTED';
+    } else if (pClass.includes('anomaly flagged') || pClass.includes('anomaly detected') || pClass.includes('defect') || pClass.includes('tamper')) {
       pBadge.className = 'badge badge-high';
       pBadge.textContent = 'ANOMALY DETECTED';
+    } else if (pClass.includes('unavailable') || pClass.includes('unable')) {
+      pBadge.className = 'badge badge-medium';
+      pBadge.textContent = 'INCONCLUSIVE';
     } else {
       pBadge.className = 'badge badge-low';
-      pBadge.textContent = 'CLEAN BASELINE';
+      pBadge.textContent = 'NO ANOMALY DETECTED';
     }
   }
 

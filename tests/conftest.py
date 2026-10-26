@@ -10,6 +10,7 @@ sys.path.insert(0, str(backend_dir))
 from app.main import app
 from app.core.database import SessionLocal, init_db
 from app.scripts.generate_demo_data import seed_database_if_empty
+from sqlalchemy import text
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_test_db():
@@ -18,6 +19,18 @@ def setup_test_db():
     seed_database_if_empty(db)
     db.close()
     yield
+    clean_db = SessionLocal()
+    try:
+        clean_db.execute(text("DELETE FROM model_predictions WHERE inspection_id > 2"))
+        clean_db.execute(text("DELETE FROM explainability_artifacts WHERE inspection_id > 2"))
+        clean_db.execute(text("DELETE FROM ocr_results WHERE inspection_id > 2"))
+        clean_db.execute(text("DELETE FROM verification_results WHERE inspection_id > 2"))
+        clean_db.execute(text("DELETE FROM inspections WHERE id > 2"))
+        clean_db.commit()
+    except Exception:
+        clean_db.rollback()
+    finally:
+        clean_db.close()
 
 @pytest.fixture
 def client():

@@ -60,7 +60,7 @@ def generate_visual_explanation(
             conf = box_item.get("confidence", 0.0)
             if len(b) == 4:
                 x, y, bw, bh = b
-                color = (0, 0, 255) if "anomaly" in predicted_class.lower() or "deficiency" in label.lower() or "blur" in label.lower() else (0, 200, 0)
+                color = (0, 0, 255) if ("anomaly flagged" in predicted_class.lower() or "deficiency" in label.lower() or "blur" in label.lower()) else (0, 200, 0)
                 cv2.rectangle(blended, (x, y), (x + bw, y + bh), color, 2)
                 
                 # Text badge
