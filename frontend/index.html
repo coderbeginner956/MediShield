@@ -310,6 +310,15 @@
                 </select>
               </div>
 
+              <div class="form-group">
+                <label>Specimen Triage / Screening Condition</label>
+                <select id="select-condition" class="select-input">
+                  <option value="auto">Auto-Detect (Vision & OCR Feature Extraction)</option>
+                  <option value="counterfeit">Suspected Counterfeit / Packaging Defect</option>
+                  <option value="genuine">Known Authentic Baseline Specimen</option>
+                </select>
+              </div>
+
               <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 12px; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 20px;">
                 <strong style="color: var(--text-white); display: block; margin-bottom: 4px;">Honest Uncertainty Disclosure:</strong>
                 MediShield AI provides visual screening triage. Confidence scores reflect internal feature attributions and do NOT represent certified pharmacological guarantees.

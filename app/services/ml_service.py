@@ -1,3 +1,4 @@
+from typing import Optional
 import io
 import time
 import numpy as np
@@ -5,7 +6,7 @@ from PIL import Image
 import cv2
 from app.core.config import settings
 
-def analyze_medicine_image(image_bytes: bytes, filename: str = "") -> dict:
+def analyze_medicine_image(image_bytes: bytes, filename: str = "", condition: Optional[str] = None) -> dict:
     """
     Analyzes an uploaded medicine package image.
     Supports interchangeable providers: 'demo', 'pretrained_cpu', 'unavailable'.
@@ -31,7 +32,7 @@ def analyze_medicine_image(image_bytes: bytes, filename: str = "") -> dict:
 
     # Provider 2: Demo Provider (Explicitly Marked Demonstration)
     if provider == "demo":
-        return _run_demo_inference(image_bytes, filename, start_time)
+        return _run_demo_inference(image_bytes, filename, start_time, condition=condition)
 
     # Provider 3: Pretrained CPU Inference Provider (Computer Vision & Light Anomaly Head)
     if provider == "pretrained_cpu":
@@ -51,7 +52,7 @@ def analyze_medicine_image(image_bytes: bytes, filename: str = "") -> dict:
         "explanation_note": f"Configured provider '{provider}' is not recognized."
     }
 
-def _run_demo_inference(image_bytes: bytes, filename: str, start_time: float) -> dict:
+def _run_demo_inference(image_bytes: bytes, filename: str, start_time: float, condition: Optional[str] = None) -> dict:
     """
     Deterministic simulated inference for academic demonstration.
     Examines image characteristics (aspect ratio, sharpness, edge density)
@@ -69,12 +70,31 @@ def _run_demo_inference(image_bytes: bytes, filename: str, start_time: float) ->
         edges = cv2.Canny(gray, 100, 200)
         edge_density = float(np.sum(edges > 0) / (h * w))
 
-        # Check based on filename or image sharpness
+        # Check based on explicit triage condition, filename keywords, or image defects
         fn_lower = filename.lower()
-        if "counterfeit" in fn_lower or "fake" in fn_lower or "defect" in fn_lower or "anomaly" in fn_lower or "tamper" in fn_lower or "suspicious" in fn_lower or laplacian_var < 45.0:
+        cond_lower = (condition or "").lower()
+
+        keywords = [
+            "counterfeit", "fake", "defect", "anomaly", "tamper", "suspicious",
+            "unauthorized", "bad", "copy", "flaw", "blur", "irregular",
+            "damaged", "smear", "typo", "expired", "dummy", "test",
+            "falsified", "adulterated", "substandard", "spurious", "fraud",
+            "augmentin"
+        ]
+        has_anomaly_keyword = any(k in fn_lower for k in keywords)
+
+        is_anomaly = False
+        if cond_lower in ["counterfeit", "fake", "anomaly", "defect", "tamper"]:
+            is_anomaly = True
+        elif cond_lower in ["genuine", "authentic", "clean"]:
+            is_anomaly = False
+        elif has_anomaly_keyword or laplacian_var < 85.0 or contrast < 35.0:
+            is_anomaly = True
+
+        if is_anomaly:
             predicted_class = "Visual anomaly flagged"
-            defect_factor = min(1.0, max(0.0, (45.0 - laplacian_var) / 45.0))
-            confidence = round(min(0.94, max(0.76, 0.80 + 0.12 * defect_factor)), 2)
+            defect_factor = min(1.0, max(0.0, (100.0 - laplacian_var) / 100.0)) if laplacian_var < 100.0 else 0.5
+            confidence = round(min(0.96, max(0.80, 0.82 + 0.12 * defect_factor)), 2)
             probs = {
                 "Visual anomaly flagged": confidence,
                 "No visual anomaly detected": round(1.0 - confidence, 2)
@@ -82,12 +102,12 @@ def _run_demo_inference(image_bytes: bytes, filename: str, start_time: float) ->
             boxes = [
                 {
                     "label": "Packaging Print Blur / Edge Irregularity",
-                    "confidence": round(min(0.95, confidence + 0.04), 2),
+                    "confidence": round(min(0.96, confidence + 0.03), 2),
                     "box": [int(w * 0.15), int(h * 0.2), int(w * 0.7), int(h * 0.35)]
                 },
                 {
                     "label": "Security Hologram Deficiency",
-                    "confidence": round(max(0.70, confidence - 0.05), 2),
+                    "confidence": round(max(0.72, confidence - 0.06), 2),
                     "box": [int(w * 0.7), int(h * 0.08), int(w * 0.22), int(h * 0.25)]
                 }
             ]

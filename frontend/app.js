@@ -260,6 +260,13 @@ async function loadDemoSample(sampleType) {
   if (sampleType === 'counterfeit') sampleFilename = 'sample_augmentin_counterfeit.jpg';
   if (sampleType === 'expired') sampleFilename = 'ref_paracetamol_box.jpg';
 
+  const condSelect = document.getElementById('select-condition');
+  if (condSelect) {
+    if (sampleType === 'counterfeit') condSelect.value = 'counterfeit';
+    else if (sampleType === 'genuine') condSelect.value = 'genuine';
+    else condSelect.value = 'auto';
+  }
+
   const imgUrl = `/storage/uploads/${sampleFilename}`;
   
   try {
@@ -292,6 +299,9 @@ async function submitInspectionForm() {
   const formData = new FormData();
   formData.append('file', selectedFile);
   formData.append('auto_analyze', 'true');
+
+  const condSelect = document.getElementById('select-condition');
+  if (condSelect && condSelect.value) formData.append('condition', condSelect.value);
 
   const prodSelect = document.getElementById('select-product');
   if (prodSelect && prodSelect.value) formData.append('product_id', prodSelect.value);

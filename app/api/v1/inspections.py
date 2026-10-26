@@ -137,6 +137,7 @@ async def create_inspection(
     batch_id: Optional[int] = Form(None),
     reference_image_id: Optional[int] = Form(None),
     auto_analyze: bool = Form(True),
+    condition: Optional[str] = Form(None),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -187,17 +188,17 @@ async def create_inspection(
     )
 
     if auto_analyze:
-        _execute_full_inspection_pipeline(db, insp, file_bytes, saved_info["filepath"])
+        _execute_full_inspection_pipeline(db, insp, file_bytes, saved_info["filepath"], original_filename=file.filename or "", condition=condition)
 
     db.refresh(insp)
     return _to_response_dict(insp)
 
-def _execute_full_inspection_pipeline(db: Session, insp: Inspection, file_bytes: bytes, abs_image_path: str):
+def _execute_full_inspection_pipeline(db: Session, insp: Inspection, file_bytes: bytes, abs_image_path: str, original_filename: str = "", condition: Optional[str] = None):
     """Executes AI screening, Explainability, Reference Comparison, OCR, and Multi-factor Risk Synthesis."""
-    filename = Path(abs_image_path).name
+    eval_filename = f"{original_filename} {Path(abs_image_path).name}".strip()
 
     # 1. AI Visual Screening
-    analysis = analyze_medicine_image(image_bytes=file_bytes, filename=filename)
+    analysis = analyze_medicine_image(image_bytes=file_bytes, filename=eval_filename, condition=condition)
     pred = ModelPrediction(
         inspection_id=insp.id,
         model_name=analysis["model_name"],
@@ -230,7 +231,7 @@ def _execute_full_inspection_pipeline(db: Session, insp: Inspection, file_bytes:
     db.add(explain)
 
     # 3. OCR Label Inspection
-    ocr_res = perform_ocr_extraction(abs_image_path, provider=settings.OCR_PROVIDER)
+    ocr_res = perform_ocr_extraction(abs_image_path, provider=settings.OCR_PROVIDER, original_filename=eval_filename, condition=condition)
     ocr = OCRResult(
         inspection_id=insp.id,
         raw_text=ocr_res["raw_text"],

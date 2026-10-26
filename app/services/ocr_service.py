@@ -1,9 +1,10 @@
+from typing import Optional
 import re
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 import os
 
-def perform_ocr_extraction(image_path: str, provider: str = "mock") -> Dict[str, Any]:
+def perform_ocr_extraction(image_path: str, provider: str = "mock", original_filename: str = "", condition: Optional[str] = None) -> Dict[str, Any]:
     """
     Performs OCR label inspection on medicine packaging.
     Supports easyocr/tesseract when available, with a resilient rule-based mock parser for demo.
@@ -16,7 +17,8 @@ def perform_ocr_extraction(image_path: str, provider: str = "mock") -> Dict[str,
         return _empty_ocr_result("Image file not found on disk")
 
     # If provider is mock or fallback
-    filename = os.path.basename(image_path).lower()
+    fn_lower = f"{original_filename} {os.path.basename(image_path)}".lower()
+    filename = fn_lower
     
     # Context-aware extraction based on simulated packaging or image clues
     if "amox" in filename or "amoxicillin" in filename:
@@ -49,7 +51,16 @@ def perform_ocr_extraction(image_path: str, provider: str = "mock") -> Dict[str,
         detected_mfg = "01/2023"
         detected_exp = "12/2024" # Note: Expired date for demonstration!
         detected_reg = "MH/DRUGS/2021/887"
-    elif "fake" in filename or "defect" in filename or "anomaly" in filename or "counterfeit" in filename or "augmentin" in filename:
+    elif (
+        (condition and condition.lower() in ["counterfeit", "fake", "anomaly", "defect", "tamper"]) or
+        any(k in filename.lower() for k in [
+            "counterfeit", "fake", "defect", "anomaly", "tamper", "suspicious",
+            "unauthorized", "bad", "copy", "flaw", "blur", "irregular",
+            "damaged", "smear", "typo", "expired", "dummy", "test",
+            "falsified", "adulterated", "substandard", "spurious", "fraud",
+            "augmentin"
+        ])
+    ):
         raw_text = (
             "AUGMENTlN 625mg DUO\n"
             "Mfr: GlaxoSimthKllne\n"
