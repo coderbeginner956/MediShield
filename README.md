@@ -77,9 +77,9 @@ To generate a secure public HTTPS link that anyone worldwide can open on their p
 
 | Role | Name | Email | Password |
 | :--- | :--- | :--- | :--- |
-| **Administrator** | Dr. Eleanor Vance | `admin@medishield.ai` | `admin123` |
-| **Field Inspector** | Marcus Reed | `inspector@medishield.ai` | `inspector123` |
-| **QA Reviewer** | Sophia Chen | `reviewer@medishield.ai` | `reviewer123` |
+| **Administrator** | Anushri | `admin@medishield.ai` | `admin123` |
+| **Field Inspector** | Juee | `inspector@medishield.ai` | `inspector123` |
+| **QA Reviewer** | Priti | `reviewer@medishield.ai` | `reviewer123` |
 
 *(Note: You can switch active roles with 1 click directly in the web UI header!)*
 

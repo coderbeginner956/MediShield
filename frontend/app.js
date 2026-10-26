@@ -121,8 +121,8 @@ function switchView(viewName) {
 function cycleUserRole() {
   const users = [
     { id: 1, name: 'Anushri', role: 'admin', email: 'admin@medishield.ai', initials: 'AN' },
-    { id: 2, name: 'Marcus Reed', role: 'inspector', email: 'inspector@medishield.ai', initials: 'MR' },
-    { id: 3, name: 'Sophia Chen', role: 'reviewer', email: 'reviewer@medishield.ai', initials: 'SC' }
+    { id: 2, name: 'Juee', role: 'inspector', email: 'inspector@medishield.ai', initials: 'JU' },
+    { id: 3, name: 'Priti', role: 'reviewer', email: 'reviewer@medishield.ai', initials: 'PR' }
   ];
 
   const currentIdx = users.findIndex(u => u.role === currentUser.role);

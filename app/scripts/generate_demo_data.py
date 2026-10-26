@@ -98,14 +98,14 @@ def seed_database_if_empty(db: Session):
     inspector_user = User(
         email="inspector@medishield.ai",
         hashed_password=hash_password("inspector123"),
-        full_name="Marcus Reed (Field Inspector)",
+        full_name="Juee (Field Inspector)",
         role="inspector",
         is_active=True
     )
     reviewer_user = User(
         email="reviewer@medishield.ai",
         hashed_password=hash_password("reviewer123"),
-        full_name="Sophia Chen (QA Reviewer)",
+        full_name="Priti (QA Reviewer)",
         role="reviewer",
         is_active=True
     )
