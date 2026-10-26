@@ -71,7 +71,7 @@ def _run_demo_inference(image_bytes: bytes, filename: str, start_time: float) ->
 
         # Check based on filename or image sharpness
         fn_lower = filename.lower()
-        if "counterfeit" in fn_lower or "fake" in fn_lower or "defect" in fn_lower or laplacian_var < 45.0:
+        if "counterfeit" in fn_lower or "fake" in fn_lower or "defect" in fn_lower or "anomaly" in fn_lower or "tamper" in fn_lower or "suspicious" in fn_lower or laplacian_var < 45.0:
             predicted_class = "Visual anomaly flagged"
             defect_factor = min(1.0, max(0.0, (45.0 - laplacian_var) / 45.0))
             confidence = round(min(0.94, max(0.76, 0.80 + 0.12 * defect_factor)), 2)

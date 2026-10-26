@@ -49,7 +49,7 @@ def perform_ocr_extraction(image_path: str, provider: str = "mock") -> Dict[str,
         detected_mfg = "01/2023"
         detected_exp = "12/2024" # Note: Expired date for demonstration!
         detected_reg = "MH/DRUGS/2021/887"
-    elif "fake" in filename or "defect" in filename or "anomaly" in filename:
+    elif "fake" in filename or "defect" in filename or "anomaly" in filename or "counterfeit" in filename or "augmentin" in filename:
         raw_text = (
             "AUGMENTlN 625mg DUO\n"
             "Mfr: GlaxoSimthKllne\n"
